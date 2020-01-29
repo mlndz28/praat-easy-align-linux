@@ -406,7 +406,7 @@ endwhile
 endproc
 
 procedure textEncodingPreferences
-  Read Strings from raw text file... 'preferencesDirectory$'\Preferences5.ini
+  Read Strings from raw text file... 'preferencesDirectory$'/prefs5
   .ns=Get number of strings
   for .i to .ns
     .s$=Get string... '.i'

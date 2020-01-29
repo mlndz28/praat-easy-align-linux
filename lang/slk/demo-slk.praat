@@ -1,5 +1,5 @@
 clearinfo
-eadir$=preferencesDirectory$+"\plugin_easyalign\"
+eadir$=preferencesDirectory$+"/plugin_easyalign/"
 
 Read from file... prince-slk.mp3
 Read Strings from raw text file... prince-slk.txt

@@ -114,8 +114,8 @@ sID=Extract row labels as Strings
 
 createDirectory("tmp")
 printline Language : 'language$'
-tmpDir$="tmp\"
-langDir$="lang\'language$'\"
+tmpDir$="tmp/"
+langDir$="lang/'language$'/"
 filedelete 'tmpDir$'tout.txt
 
 if language$=="fra" or language$=="en"
@@ -132,7 +132,7 @@ if language$=="fra" or language$=="en"
     else
       filedelete tmp/t.txt
       fileappend tmp/t.txt 's$'
-      system 'langDir$'phon250.exe 'langDir$'phon250.'language$'.ini 'tmpDir$'t.txt 'tmpDir$'tout.txt
+      system wine 'langDir$'phon250.exe 'langDir$'phon250.'language$'.ini 'tmpDir$'t.txt 'tmpDir$'tout.txt
 
       s3ID=Read Strings from raw text file... tmp/tout.txt
       ns3=Get number of strings
@@ -149,7 +149,7 @@ if language$=="fra" or language$=="en"
 
 elsif language$=="sw"
   Write to raw text file... 'langDir$'/t.txt
-  system cd lang && cd sw && psw.exe t.txt tout.txt 
+  system cd lang && cd sw && wine psw.exe t.txt tout.txt 
   s2ID=Read Strings from raw text file... 'langDir$'/tout.txt
   
 elsif language$="spa" or language$="spa (seseo)"
@@ -165,7 +165,7 @@ elsif language$="spa" or language$="spa (seseo)"
   Change... .* \L& 0 Regular Expressions
   Write to raw text file... tmp/t.txt
   printline 'langDir$'saga.exe -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
-  system 'langDir$'saga.exe -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
+  system wine 'langDir$'saga.exe -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
   s4ID=Read Strings from raw text file... tmp/tout.txt.fon
   s3ID=Change... r 4 0 Literals
   s2ID=Change... 44 r 0 Literals
@@ -179,7 +179,7 @@ elsif language$=="porbra"
   Change... " " \n 0 Regular Expressions
   #lowercase only
   Change... .* \L& 0 Regular Expressions
-  Change... É é 0 Literals
+  Change... ï¿½ ï¿½ 0 Literals
 
   Text writing preferences... UTF-8
   Write to raw text file... 'tmpDir$'t.txt
@@ -187,9 +187,9 @@ elsif language$=="porbra"
 #  system move dicionariofoneticohifen.txt 'tmpDir$'tout.txt
 #  filedelete vogaistonicashifen.txt
 printline  system 'langDir$'lapsG2UFPB.exe 'tmpDir$'t.txt false 'langDir$'tabela
-printline  system move 'langDir$'dicionariofonetico.txt 'tmpDir$'tout.txt
-  system 'langDir$'lapsG2UFPB.exe 'tmpDir$'t.txt false 'langDir$'tabela
-  system move dicionariofonetico.txt 'tmpDir$'tout.txt
+printline  system mv 'langDir$'dicionariofonetico.txt 'tmpDir$'tout.txt
+  system wine 'langDir$'lapsG2UFPB.exe 'tmpDir$'t.txt false 'langDir$'tabela
+  system mv dicionariofonetico.txt 'tmpDir$'tout.txt
   s3ID=Read Strings from raw text file... 'tmpDir$'tout.txt
   #pour chaque Strings de sID, compter les mots, pop n strings de s2ID pour une nouvelle string de s2ID
   select sID
@@ -226,7 +226,7 @@ elsif language$=="slk"
   Text reading preferences... try UTF-8, then ISO Latin-1
   Write to raw text file... 'tmpDir$'t.txt
   
-  system 'langDir$'slk.exe 'tmpDir$'t.txt 'tmpDir$'tout.txt 
+  system wine 'langDir$'slk.exe 'tmpDir$'t.txt 'tmpDir$'tout.txt 
   s3ID=Read Strings from raw text file... 'tmpDir$'tout.txt
   s4ID=Change... "![^ ]!" "" 0 Regular Expressions
   s5ID=Change... "   " # 0 Regular Expressions

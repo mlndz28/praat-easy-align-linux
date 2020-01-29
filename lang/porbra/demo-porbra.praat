@@ -1,5 +1,5 @@
 clearinfo
-eadir$=preferencesDirectory$+"\plugin_easyalign\"
+eadir$=preferencesDirectory$+"/plugin_easyalign/"
 Read from file... porbra.wav
 Read Strings from raw text file... porbra.txt
 pause Sound and transcription loaded. Launch step#1 Utterance segmentation ?
