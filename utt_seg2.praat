@@ -1,6 +1,6 @@
 #jeanphilippegoldman@gmail.com
-#mornex-les-bains déc 06
-#22déc bug with one-pphrase file
+#mornex-les-bains dï¿½c 06
+#22dï¿½c bug with one-pphrase file
 
 form 1.Macro-segmentation: creates ortho tier from Sound and Strings
   comment select a Sound and a Strings object

@@ -17,7 +17,7 @@ clearinfo
 sID=selected("Sound")
 eadir$=preferencesDirectory$+"/plugin_easyalign/"
 execute "'eadir$'utt_seg2.praat" 'ortho_tier$' no
-tgID=selected("Sound")
+tgID=selected("TextGrid")
 select tgID
 execute "'eadir$'phonetize_orthotier2.praat" 'ortho_tier$' phono 'language$' yes  no
 select tgID

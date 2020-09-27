@@ -359,8 +359,8 @@ for i from 1 to n
       else
         t1$=""
       endif
-      
-      system wine HVite.exe -A 't1$' 'bsil$' -a -m -C tmp/analysis.cfg  -H "'hmmfile$'" -t 250 "tmp/'basename$'_'i'.dct" lang/'language$'/'language$'phone1.list "tmp/'basename$'_'i'.wav" >> "tmp/reco.log"  2>&1
+     
+      system HVite -A 't1$' 'bsil$' -a -m -C tmp/analysis.cfg  -H "'hmmfile$'" -t 250 "tmp/'basename$'_'i'.dct" lang/'language$'/'language$'phone1.list "tmp/'basename$'_'i'.wav" >> "tmp/reco.log"  2>&1
       if fileReadable("tmp/'basename$'_'i'.rec")==0
         printline Utt.# 'i', alignment could not be aligned. : 'lobak$'
         n_utt_notrec = n_utt_notrec +1    ; nombre de reco non reussies
