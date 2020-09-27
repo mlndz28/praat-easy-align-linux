@@ -1,0 +1,159 @@
+#!/bin/bash
+
+PRAAT="praat --run"
+PRAAT_SCRIPT="plugin_easyalign/script_interface.praat"
+
+languages=("en" "fra" "nan" "porbra" "slk" "spa")
+
+# set default flags
+declare -A flags=( [language]=en )
+
+## Auxiliar functions
+_err() {
+  echo -e "\e[91m[error]:\e[0m $*" >&2
+}
+
+_command_help() {
+  if [ -v "flags[help]" ] || [ -z "$1" ]; then
+    echo damn
+    echo -e "$2"
+    exit
+  fi
+}
+
+## Check if praat is installed
+if ! [ -x "$(command -v $PRAAT)" ]; then
+  _err "Praat is not installed"
+  exit 1
+fi
+
+## Get the preferences folder location
+if ! [ -f "/tmp/praat.conf" ]; then
+  echo "printline 'preferencesDirectory$'" > /tmp/dir.praat
+  trap "rm -f /tmp/dir.praat" 0 2 3 15
+  pref_folder=$($PRAAT /tmp/dir.praat)
+  echo $pref_folder > /tmp/praat.conf
+else 
+  pref_folder=$(cat /tmp/praat.conf) # since reading from a file is faster than executing a praat script
+fi
+
+FLAGS_HELP="Options:
+    
+    -h,--help             Show usage for such command
+    -o,--output <file>    Resulting TextGrid's save file 
+                          Default: <audio file>.tg
+    -l,--language <lan>   Change the language. Default: ${flags[language]}
+"
+
+HELP="Usage: $(basename $0) [<options>] <command> [<args>]
+
+Commands:
+
+    macrosegmentation     Split the signal into sentences 
+    phonetization         Produce a phonetic transcription
+    phonesegmentation     Align the phonemes
+    all                   Execute the former steps in given order
+
+${FLAGS_HELP}
+Run '$(basename $0) <command> --help' for more information on a command."
+
+declare -a arguments
+for ((i = 1 ; i < $#+1 ; i++)); do
+  if [[ "${!i}" =~ ^- ]]; then
+    case ${!i} in
+    -h | --help )
+      flags[help]=1
+      ;;
+    -o | --output )
+      i=$(($i+1))
+      flags[output]=${!i}
+      ;;
+    -l | --language )
+      i=$(($i+1)) 
+      if [[ " ${languages[@]} " =~ " ${!i} " ]]; then
+        flags[language]=${!i}
+      else
+        echo "Supported languages: "
+        printf '    %s\n' "${languages[@]}"
+        exit
+      fi
+      ;;
+    esac
+  else
+    arguments+=(${!i})
+  fi
+done
+set -- "${arguments[@]}"
+if [ ! -v "flags[output]" ] && [ -n "$2" ]; then
+  flags[output]=${2%.*}   # basename of first input file
+fi
+
+case "$1" in
+  macrosegmentation)
+    help=$"Usage: $(basename $0) $1 [<options>] <audio file> <transcription file>
+
+Description:
+
+    Create a new transcription with timemarks by roughly matching
+    the sound signal with the sentences based on signal duration 
+    and utterance transcription length.  
+
+${FLAGS_HELP}"
+    #if [ -v "flags[help]" ] || [ -v $3 ]; then
+    #  echo -e "$help"
+    #  exit
+    #fi
+    _command_help "$3" "$help"
+    $PRAAT $pref_folder/$PRAAT_SCRIPT macrosegmentation "${flags[language]}" "$2" "$3" "${flags[output]}" ortho
+    ;;
+  phonetization)
+    help=$"Usage: $(basename $0) $1 [<options>] <TextGrid file>
+
+Description:
+
+    Produce a phonetic transcription out of an ortographic one.
+    Returns a TextGrid file, and the input must be a TextGrid 
+    file as well.  
+
+${FLAGS_HELP}"
+    _command_help "$2" "$help"
+    $PRAAT $pref_folder/$PRAAT_SCRIPT phonetization "${flags[language]}" "null" "$2" "${flags[output]}" ortho
+    ;;
+  phonesegmentation)
+    help=$"Usage: $(basename $0) $1 [<options>] <audio file> <TextGrid file>
+
+Description:
+
+    Aligns the audio with a phonetic and an ortographic transcription
+    (both contained in the TextGrid file) using Hidden Markov Models.
+
+${FLAGS_HELP}"
+    _command_help "$3" "$help"
+    $PRAAT $pref_folder/$PRAAT_SCRIPT phonesegmentation "${flags[language]}" "$2" "$3" "${flags[output]}" ortho
+    ;;
+  all)
+    help=$"Usage: $(basename $0) $1 [<options>] <audio file> <transcription file>
+
+Description:
+
+    Create both phonetic and ortographic transcriptions aligned
+    with the sound signal. Executes macrosegmentation,
+    phonetization and phonosegmentation in this order.  
+
+${FLAGS_HELP}"
+    _command_help "$3" "$help"
+
+    $PRAAT $pref_folder/$PRAAT_SCRIPT all "${flags[language]}" "$2" "$3" "${flags[output]}" ortho
+    ;;
+  *)
+  if [ -v "flags[help]" ] || [ -v $1 ]; then
+    echo -e "$HELP"
+  else
+    _err "'$1' is not a command. Please use '$(basename $0) --help'"
+  fi
+    ;;
+esac
+
+
+
+#praat --run ~/.praat-dir/plugin_easyalign/script_interface.praat all spa "$file" "${basename}.txt" "gen/Azul/${basename##*/}.tg"
