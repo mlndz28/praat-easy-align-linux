@@ -22,13 +22,13 @@ sudo make install-htktools
 ## Installing
 
 ```sh
-sudo su -c "bash <(wget -qO- https://raw.githubusercontent.com/mlndz28/praat-easyalign-linux/master/installer.sh)" root
+sudo su -c "bash <(wget -qO- https://raw.githubusercontent.com/mlndz28/praat-easy-align-linux/master/installer.sh)" root
 ```
 
 ## Uninstalling
 
 ```sh
-sudo su -c "bash <(wget -qO- https://raw.githubusercontent.com/mlndz28/praat-easyalign-linux/master/uninstaller.sh)" root
+sudo su -c "bash <(wget -qO- https://raw.githubusercontent.com/mlndz28/praat-easy-align-linux/master/uninstaller.sh)" root
 ```
 
 
