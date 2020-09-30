@@ -164,8 +164,8 @@ elsif language$="spa" or language$="spa (seseo)"
   #suppress uppercase for SAGA
   Change... .* \L& 0 Regular Expressions
   Write to raw text file... tmp/t.txt
-  printline 'langDir$'saga.exe -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
-  system wine 'langDir$'saga.exe -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
+  printline saga -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
+  system saga -MX 'seseo$' 'tmpDir$'t.txt 'tmpDir$'tout.txt
   s4ID=Read Strings from raw text file... tmp/tout.txt.fon
   s3ID=Change... r 4 0 Literals
   s2ID=Change... 44 r 0 Literals

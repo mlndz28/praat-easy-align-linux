@@ -17,6 +17,22 @@ make htktools
 sudo make install-htktools
 ```
 
+### For spanish
+
+* [SAGA](https://github.com/TALP-UPC/saga)
+
+```sh
+sudo apt install meson
+git clone https://github.com/TALP-UPC/saga.git
+cd saga
+meson builddir
+cd builddir
+ninja test
+sudo ninja install
+```
+
+### For other supported languages
+
 * [Wine](https://wiki.winehq.org/Download)
 
 ## Installing
