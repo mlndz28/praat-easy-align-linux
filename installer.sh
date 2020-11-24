@@ -20,7 +20,7 @@ fi
 
 ## Check if Wine is installed
 if ! [ -x "$(command -v wine)" ]; then
-  _err "Wine is not installed"
+  echo "Wine is not installed, some languages may not work"
 fi
 
 
@@ -29,16 +29,15 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [ $SUDO_USER ]; then
-    REAL_USER=$SUDO_USER
-else
-    REAL_USER=$(whoami)
+    privs="sudo -u $SUDO_USER"
 fi
 
 ## Get the preferences directory defined in Praat
 echo "printline 'preferencesDirectory$'" > /tmp/pref_folder.praat
-pref_folder=$(sudo -u $REAL_USER praat --run /tmp/pref_folder.praat)
+pref_folder=$($privs praat --run /tmp/pref_folder.praat)
 
-sudo -u $REAL_USER git clone --depth 1 https://github.com/mlndz28/praat-easy-align-linux $pref_folder/$PLUGIN_NAME
+rm -rf $pref_folder/$PLUGIN_NAME
+$privs git clone --depth 1 https://github.com/mlndz28/praat-easy-align-linux $pref_folder/$PLUGIN_NAME
 cp $pref_folder/$PLUGIN_NAME/easyalign /usr/local/bin/easyalign
 
 echo -e "\n  Done.\n"
