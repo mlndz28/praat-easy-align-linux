@@ -3,12 +3,13 @@
 * [Praat](https://www.fon.hum.uva.nl/praat/download_linux)
 
 ```sh
-sudo apt-get install praat
+sudo apt-get install -y praat
 ```
 
 * [HTK tools](https://github.com/open-speech/HTK)
 
 ```sh
+sudo apt-get install -y gcc-multilib
 git clone https://github.com/open-speech/HTK.git
 cd HTK
 ./configure --disable-hslab
@@ -22,7 +23,7 @@ sudo make install-htktools
 * [SAGA](https://github.com/TALP-UPC/saga)
 
 ```sh
-sudo apt install meson
+sudo apt-get install -y meson
 git clone https://github.com/TALP-UPC/saga.git
 cd saga
 meson builddir
